@@ -7,24 +7,27 @@ from nltk.stem import PorterStemmer
 from sklearn.feature_extraction.text import CountVectorizer
 import timeit
 
-cleaned_description = get_and_clean_data()
-cleaned_description = cleaned_description
 
-tokenized_description = cleaned_description.apply(lambda s: word_tokenize(s))
-stop_dict = {s: 1 for s in stopwords.words()}
-sw_removed_description = tokenized_description.apply(lambda s: [word for word in s if word not in
-                                                                stop_dict])
-sw_removed_description = tokenized_description.apply(lambda s: [word for word in s if word not in
-                                                                stopwords.words()])
-sw_removed_description = sw_removed_description.apply(lambda s: [word for word in s if
-                                                                 len(word) > 2])
+def cleandataframe():
+    cleaned_description = get_and_clean_data()
+    cleaned_description = cleaned_description
 
-ps = PorterStemmer()
-stemmed_description = sw_removed_description.apply(lambda s: [ps.stem(w) for w in s])
+    tokenized_description = cleaned_description.apply(lambda s: word_tokenize(s))
+    stop_dict = {s: 1 for s in stopwords.words()}
+    sw_removed_description = tokenized_description.apply(lambda s: [word for word in s if word not in
+                                                                    stop_dict])
+    sw_removed_description = tokenized_description.apply(lambda s: [word for word in s if word not in
+                                                                    stopwords.words()])
+    sw_removed_description = sw_removed_description.apply(lambda s: [word for word in s if
+                                                                     len(word) > 2])
 
-cv = CountVectorizer(analyzer=lambda x: x)
-X = cv.fit_transform(stemmed_description)
-print(pd.DataFrame(X.toarray(), columns=cv.get_feature_names()))
+    ps = PorterStemmer()
+    stemmed_description = sw_removed_description.apply(lambda s: [ps.stem(w) for w in s])
+
+    cv = CountVectorizer(analyzer=lambda x: x)
+    X = cv.fit_transform(stemmed_description)
+    print(pd.DataFrame(X.toarray(), columns=cv.get_feature_names()))
+
 
 print('time of todok', timeit.timeit(lambda: X.todok() * X.T.todok(), number=1))
 print('time of tolil', timeit.timeit(lambda: X.tolil() * X.T.tolil(), number=1))

@@ -29,22 +29,5 @@ def cleandataframe():
     print(pd.DataFrame(X.toarray(), columns=cv.get_feature_names()))
 
 
-print('time of todok', timeit.timeit(lambda: X.todok() * X.T.todok(), number=1))
-print('time of tolil', timeit.timeit(lambda: X.tolil() * X.T.tolil(), number=1))
-print('time of tocoo', timeit.timeit(lambda: X.tocoo() * X.T.tocoo(), number=1))
-print('time of tocsc', timeit.timeit(lambda: X.tocsc() * X.T.tocsc(), number=1))
 
-B = X.todense()
-times = 100
 
-compCsr = (timeit.timeit(lambda: csr_matrix(B), number=times) / times)
-compDok = (timeit.timeit(lambda: dok_matrix(B), number=times) / times)
-compLil = (timeit.timeit(lambda: lil_matrix(B), number=times) / times)
-compCoo = (timeit.timeit(lambda: coo_matrix(B), number=times) / times)
-compCsc = (timeit.timeit(lambda: csc_matrix(B), number=times) / times)
-
-print('comCsr :', compCsr)
-print('comDok :', compDok)
-print('comLil :', compLil)
-print('coCoo :', compCoo)
-print('comCsc :', compCsc)

@@ -24,13 +24,12 @@ vectorizer.fit(processed_content)
 freq_iula = vectorizer.transform(processed_content)
 freq_iula = pd.DataFrame(freq_iula.todense(), columns=vectorizer.get_feature_names()).sum()
 
-query = ['defeat', 'decet', 'defect', 'deft', 'defer', 'Deeft']
+query = ['max', 'man', 'map', 'math']
 transformed_query = [vectorizer.inverse_transform(vectorizer.transform([q])) for q in query]
 query_freq = pd.Series([freq_iula.T.loc[tq[0]].values[0] if len(tq[0]) > 0 else 0 for tq in transformed_query],
                        index=query)
 
-IULA = pd.DataFrame([['defeat', 11], ['decet', 0], ['defect', 198], ['deft', 0], ['defer', 15],
-                     ['Deeft', 0]], columns=['word', 'frequency'])
+IULA = pd.DataFrame([['max', 27], ['man', 25], ['map', 618], ['math', 4]], columns=['word', 'frequency'])
 IULA_pop = 2.1e6
 IULA['P(w)'] = IULA['frequency'] / IULA_pop
 IULA['rank'] = IULA['frequency'].rank(ascending=False).astype(int)
@@ -58,7 +57,6 @@ def read_norvigori():
 
 def get_count(c, norvig_orig):
     return norvig_orig.apply(lambda x: x.term.count(c) * x.freq, axis=1).sum()
-
 
 
 pool = Pool(9)

@@ -6,7 +6,6 @@ from pathlib import Path
 import pysolr as pysolr
 from IR.M6_pagerank import Pr
 
-
 # from M6_crawled_pr import PR
 class Indexer:
     def __init__(self):

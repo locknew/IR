@@ -4,6 +4,7 @@ import pickle
 from pathlib import Path
 from elasticsearch import Elasticsearch
 
+from IR.M6_pagerank import Pr
 from M6_solr import Indexer
 
 
@@ -15,12 +16,14 @@ class Indexer:
         self.es_client = Elasticsearch("http://localhost:9200")
 
     def run_indexer(self):
+        self.pr = Pr(alpha=0.85)
         self.es_client.options(ignore_status=400).indices.create(index='simple')
         self.es_client.options(ignore_status=[400, 404]).indices.delete(index='simple')
         for file in os.listdir(self.crawled_folder):
             if file.endswith(".txt"):
                 j = json.load(open(os.path.join(self.crawled_folder, file)))
                 j['id'] = j['url']
+                j['pagerank'] = self.pr.pr_result.loc[j['id']].score
                 print(j)
                 self.es_client.index(index='simple', document=j)
 

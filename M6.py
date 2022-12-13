@@ -11,7 +11,6 @@ from queue import Queue, Empty
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urljoin, urlparse
 from pathlib import Path
-import pysolr
 
 
 class MultiThreadCrawler:
